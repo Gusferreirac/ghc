@@ -54,4 +54,11 @@ class AuthController extends Controller
             'email' => 'Invalid credentials',
         ]);
     }
+
+    public function logout(){
+        auth()->logout(); //Desloga o usuario
+        request()->session()->invalidate(); //Limpa a sessao
+        request()->session()->regenerateToken();//Gera um novo token
+        return redirect()->route('login');
+    }
 }

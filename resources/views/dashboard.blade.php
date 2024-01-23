@@ -2,11 +2,10 @@
 
 @section('content')
 <body>
-    <div class="absolute m-8 flex items-center">
+    <div class="absolute flex items-center m-8">
        @include('sidebar')
-        <h1 class="font-bold text-xl">Olá <span class="text-blue-600">usuário</span>!</h1>
     </div>
-    <div class="flex h-screen">
+    <div id="main" class="flex h-screen transition-all duration-500 ease-in-out">
         @yield('type')
     </div>
 </body>
