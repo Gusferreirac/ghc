@@ -14,5 +14,6 @@ class Person extends Model
         'email',
         'company_role',
         'cellphone',
+        'company_id',
     ];
 }

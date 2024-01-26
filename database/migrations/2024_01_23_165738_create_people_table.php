@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('person', function (Blueprint $table) {
+        Schema::create('people', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('company_role');
             $table->string('cellphone');
-            $table->foreignId('company_id')->references('id')->on('company')
-                ->onUpdate('cascade')
+            $table->foreignId('company_id')->references('id')->on('companies')
                 ->onDelete('cascade');
             $table->timestamps();
         });
@@ -30,6 +29,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('people', function (Blueprint $table) {
+            $table->dropForeign(['company_id']);
+        });
+
         Schema::dropIfExists('person');
     }
 };

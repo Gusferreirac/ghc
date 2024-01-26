@@ -45,4 +45,4 @@
     <x-vaadin-menu id="openMenu" class="w-6 mr-8"/>
 </button>
 
-<h1 id="welcome" class="text-xl font-bold transition-all duration-500 ease-in-out">Olá <span class="text-blue-600">{{auth()->user()->name}}</span>!</h1>
+<h1 id="welcome" class="text-xl font-bold transition-all duration-500 ease-in-out">Olá <span class="text-blue-600">{{$name}}</span>!</h1>
