@@ -29,11 +29,10 @@
         //Show back button
         document.getElementById('back').classList.remove("hidden");
 
-        //Show back button
+        //Show finish button
         if(stepNumber == 3){
             document.getElementById('forward').classList.add("hidden");
             document.getElementById('finish').classList.remove("hidden");
-            document.getElementById('finish').classList.add("block");
         }
     }
 
@@ -57,6 +56,9 @@
         document.getElementById(type).getElementsByClassName( 'border-gray-500' )[0].classList.remove("border-blue-600");
         document.getElementById(nextType).getElementsByClassName( 'border-gray-500' )[0].classList.add("border-blue-600");
         document.getElementById(nextType).getElementsByClassName( 'border-blue-600' )[0].classList.remove("border-gray-500");
+
+        document.getElementById('forward').classList.remove("hidden");
+        document.getElementById('finish').classList.add("hidden");
 
         //Show back button
         if(stepNumber == 1){
@@ -115,82 +117,35 @@
             <form class="block" action="{{route('register')}}" method="POST">
                 @csrf
                 {{-- Company Form --}}
-                <fieldset name="company">
-                    <div id="step1">
-                        <div class="mb-4">
-                            <label for="company_name" class="block mb-2 text-sm font-bold text-gray-700">Nome da Empresa</label>
-                            <input type="text" name="company_name" id="company_name" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="cnpj" class="block mb-2 text-sm font-bold text-gray-700">CNPJ</label>
-                            <input type="text" name="cnpj" id="cnpj" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                    </div>
-                </fieldset>
-
+                @include('auth.forms.company_form')
                 {{-- Person Form --}}
-                <fieldset name="person">
-                    <div id="step2" class="hidden">
-                        <div class="mb-4">
-                            <label for="name" class="block mb-2 text-sm font-bold text-gray-700">Nome</label>
-                            <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="cellphone" pattern="[0-9]{9}" class="block mb-2 text-sm font-bold text-gray-700">Telefone</label>
-                            <input type="tel" name="cellphone" id="cellphone" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="role" class="block mb-2 text-sm font-bold text-gray-700">Cargo</label>
-                            <input type="text" name="role" id="role" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="email" class="block mb-2 text-sm font-bold text-gray-700">Email</label>
-                            <input type="email" name="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                    </div>
-                </fieldset>
-
+                @include('auth.forms.person_form')
                 {{-- User Form --}}
-                <fieldset name="user">
-                    <div id="step3" class="hidden">
-                        <div class="mb-4">
-                            <label for="username" class="block mb-2 text-sm font-bold text-gray-700">Nome de Usuário</label>
-                            <input type="text" name="username" id="username" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
+                @include('auth.forms.user_form')
+
+                <div class="grid grid-cols-3">
+                    <div class="mb-8">
+                        <button id="back" onclick="lastForm()"  class="hidden w-full px-4 py-2 text-white bg-blue-700 rounded hover:bg-blue-800">
+                            <span class="mr-2 text-xl font-bold"><</span>
+                            Anterior</button>
+                    </div>
+
+                    <div></div>
+                    <div>
+                        <div class="mb-8" id="forward">
+                            <button  onclick="nextForm()"  class="w-full px-4 py-2 text-white bg-blue-700 rounded hover:bg-blue-800">
+                                Próximo
+                                <span class="ml-2 text-xl font-bold">></span></button>
                         </div>
-                        <div class="mb-4">
-                            <label for="password" class="block mb-2 text-sm font-bold text-gray-700">Senha</label>
-                            <input type="password" name="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="password_confirmation" class="block mb-2 text-sm font-bold text-gray-700">Confirmar Senha</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500" required>
+                        <div id="finish" class="hidden mb-8">
+                            <button type="submit" name="register" class="w-full px-4 py-2 text-white bg-blue-700 rounded hover:bg-blue-800">
+                                Finalizar
+                            </button>
                         </div>
                     </div>
-                </fieldset>
-
-                <div id="finish" class="hidden w-1/3 mb-8">
-                    <button type="submit" name="register" class="w-full px-4 py-2 text-white bg-blue-700 rounded hover:bg-blue-800">
-                        Finalizar
-                    </button>
                 </div>
+
             </form>
-
-            <div class="grid grid-cols-3">
-                <div class="mb-8">
-                    <button id="back" onclick="lastForm()"  class="hidden w-full px-4 py-2 text-white bg-blue-700 rounded hover:bg-blue-800">
-                        <span class="mr-2 text-xl font-bold"><</span>
-                        Anterior</button>
-                </div>
-
-                <div></div>
-                <div>
-                    <div class="mb-8" id="forward">
-                        <button  onclick="nextForm()"  class="w-full px-4 py-2 text-white bg-blue-700 rounded hover:bg-blue-800">
-                            Próximo
-                            <span class="ml-2 text-xl font-bold">></span></button>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="bg-blue-950">
 

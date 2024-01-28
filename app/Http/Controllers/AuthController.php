@@ -10,7 +10,10 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     public function register(){
-        return view('auth.register');
+        //Get all companies
+        $companies = Company::all();
+
+        return view('auth.register')->with('companies', $companies);
     }
 
     public function login(){
@@ -22,6 +25,7 @@ class AuthController extends Controller
             '_token'=>request('_token'),
             'company_name'=>request('company_name'),
             'company_cnpj'=>preg_replace('/\D/', '',request('cnpj')),
+            'company_id'=>request('company_id'),
         ]);
 
         $personRequest = new Request([
@@ -39,12 +43,14 @@ class AuthController extends Controller
             'password_confirmation'=>request('password_confirmation'),
         ]);
 
-        $validated_company = $companyRequest->validate(
-            [
-            'company_name' => 'required|min:3|max:40',
-            'company_cnpj' => 'required|min:14|max:14|unique:companies,company_cnpj',
-            ]
-        );
+        if(!request('company_id')){
+            $validated_company = $companyRequest->validate(
+                [
+                'company_name' => 'required|min:3|max:40',
+                'company_cnpj' => 'required|min:14|max:14|unique:companies,company_cnpj',
+                ]
+            );
+        }
 
         $validated_person = $personRequest->validate(
             [
@@ -63,14 +69,18 @@ class AuthController extends Controller
             ]
         );
 
-        //Cria a empresa
-        $company = Company::create($validated_company);
+        if(!request('company_id')){
+            //Cria a empresa
+            $company = Company::create($validated_company);
 
-        if(!$company){
-           printf("erro empresa");
+            if(!$company){
+            printf("erro empresa");
+            }
+
+            $validated_person['company_id'] = $company->id;
+        }else{
+            $validated_person['company_id'] = request('company_id');
         }
-
-        $validated_person['company_id'] = $company->id;
 
         //Cria a pessoa
         $person = Person::create($validated_person);
@@ -100,7 +110,7 @@ class AuthController extends Controller
     public function authenticate(){
         $credentials = request()->validate(
             [
-            'email' => 'required|email|max:255',
+            'name' => 'required|min:3|max:40',
             'password' => 'required|min:8',
             ]
         );
@@ -111,7 +121,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Invalid credentials',
+            'name' => 'Invalid credentials',
         ]);
     }
 

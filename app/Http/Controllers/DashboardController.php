@@ -9,6 +9,6 @@ class DashboardController extends Controller
 {
     public function index(){
         $name = Person::where('id', auth()->user()->person_id)->first()->name;
-        return view('dashboard_types.company')->with('name', $name);
+        return view('dashboard_types.start')->with('name', $name);
     }
 }
